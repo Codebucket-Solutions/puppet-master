@@ -1,0 +1,42 @@
+name: Build and Push Docker Image
+
+on:
+  push:
+    branches:
+      - stage
+
+env:
+  DOCKER_REPO: puppet-master
+  DOCKER_IMAGE: stage
+
+jobs:
+  build:
+    runs-on: ${{ vars.DOCKER_BUILD_RUNNER }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Log in to Harbor
+        run: echo "${{ secrets.HARBOR_PASSWORD }}" | docker login https://harbor.internal.codebuckets.in -u '${{ secrets.HARBOR_USER }}' --password-stdin
+
+      - name: Build Docker image
+        run: docker build -t harbor.internal.codebuckets.in/${{ env.DOCKER_REPO }}/${{ env.DOCKER_IMAGE }}:latest . -f Dockerfile.stage
+
+      - name: Push Docker image
+        run: docker push harbor.internal.codebuckets.in/${{ env.DOCKER_REPO }}/${{ env.DOCKER_IMAGE }}:latest
+
+  deploy:
+    runs-on: dev-server
+    needs: build
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Pull new Image
+        run: docker compose -f docker-compose-stage.yml pull
+
+      - name: Remove old containers
+        run: docker compose -f docker-compose-stage.yml down || true
+
+      - name: Start Container
+        run: docker compose -f docker-compose-stage.yml up -d

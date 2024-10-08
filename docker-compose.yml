@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  puppet-master:
+    image: harbor.internal.codebuckets.in/puppet-master/stage
+    container_name: puppet-master
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:32001:8000"
+    networks:
+      - puppet_master_redis_network
+    env_file:
+      - /home/ENV/puppet-master/.env
+    depends_on:
+      - redis
+
+  redis:
+    image: redis:6.2.14-bookworm
+    container_name: puppet_master_redis
+    restart: unless-stopped
+    networks:
+      - puppet_master_redis_network
+    command:
+      - /bin/sh
+      - -c
+      - redis-server --requirepass "$${REDIS_PASSWORD:?REDIS_PASSWORD variable is not set}"
+    volumes:
+      - puppet_master_redis_volume:/var/lib/redis/data
+      - /home/ENV/puppet-master/redis.conf:/usr/local/etc/redis/redis.conf:ro
+    env_file:
+      - /home/ENV/puppet-master/redis.env
+
+networks:
+  puppet_master_redis_network:
+
+volumes:
+  puppet_master_redis_volume:
+    external: true
