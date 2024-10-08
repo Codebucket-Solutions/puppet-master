@@ -21,9 +21,16 @@ module.exports = async (job: SandboxedJob) => {
     );
 
     if(payload.otherPageFunctions) {
-        for(let fn of Object.keys(payload.otherPageFunctions)) {
-            // @ts-ignore
-            await page[fn](...payload.otherPageFunctions[fn])
+        for(let fn of payload.otherPageFunctions) {
+
+            if(fn.length>0) {
+                // @ts-ignore
+                await page[fn[0]](...fn[1])
+            } else {
+                // @ts-ignore
+                await page[fn[0]]()
+            }
+
         }
     }
 

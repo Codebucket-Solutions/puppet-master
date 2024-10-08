@@ -26,13 +26,11 @@ router.post("/pdf", async (req: Request, res: Response) => {
         }
 
         if(job) {
-            let state = await job.getState()
             let response: response = job.returnvalue;
             res.download(response.path);
+        } else {
+            throw new Error("Some Error Occurred While Queueing")
         }
-
-        throw new Error("Some Error Occurred While Queueing")
-
     } catch (err ) {
         res.json({
             success: false,
