@@ -3,8 +3,6 @@ import * as puppeteer from 'puppeteer'
 import path from "path";
 import { v4 } from "uuid";
 
-const {PDF_FOLDER_PATH: pdfFolderPath=""} = process.env;
-
 module.exports = async (job: SandboxedJob) => {
 
     const payload = job.data;
@@ -14,7 +12,7 @@ module.exports = async (job: SandboxedJob) => {
     if(payload.content)
         await page.setContent(payload.content, payload.pageOptions);
 
-    const pdfPath = path.join(pdfFolderPath,`${v4()}.pdf`);
+    const pdfPath = path.join(__dirname,`${v4()}.pdf`);
     await page.pdf(
         {
             ...payload.pdfOptions,

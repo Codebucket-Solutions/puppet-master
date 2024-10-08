@@ -37,7 +37,7 @@ checkQueueHealth(queue).then(jobCounts => {
 const processorFile = path.join(__dirname, 'sandbox_worker.js');
 
 function createSandboxedWorker() {
-    return new Worker('pdfQueue', processorFile,{...bullConnection,concurrency:parseInt(workerConcurrency)});
+    return new Worker(queueName, processorFile,{...bullConnection,concurrency:parseInt(workerConcurrency)});
 }
 
 // Start multiple sandboxed workers
