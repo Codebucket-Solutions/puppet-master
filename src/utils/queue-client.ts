@@ -34,7 +34,7 @@ checkQueueHealth(queue).then(jobCounts => {
 });
 
 
-const processorFile = path.join(__dirname, 'my_procesor.js');
+const processorFile = path.join(__dirname, 'sandbox_worker.js');
 
 function createSandboxedWorker() {
     return new Worker('pdfQueue', processorFile,{
