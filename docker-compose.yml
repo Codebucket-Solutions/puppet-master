@@ -32,6 +32,8 @@ services:
 
 networks:
   internal_tools_redis_network:
+    external: true
+    name: internal_tools_redis_network
 
 volumes:
   puppet_master_redis_volume:
