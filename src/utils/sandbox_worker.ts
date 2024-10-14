@@ -23,7 +23,7 @@ module.exports = async (job: SandboxedJob) => {
     if(payload.otherPageFunctions) {
         for(let fn of payload.otherPageFunctions) {
 
-            if(fn.length>0) {
+            if(fn.length>1) {
                 // @ts-ignore
                 await page[fn[0]](...fn[1])
             } else {
