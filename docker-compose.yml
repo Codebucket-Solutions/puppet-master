@@ -2,13 +2,13 @@ version: '3.8'
 
 services:
   puppet-master:
-    image: harbor.internal.codebuckets.in/puppet-master/stage
+    image: harbor.internal.codebuckets.in/puppet-master/${DOCKER_IMAGE}
     container_name: puppet-master
     restart: unless-stopped
     ports:
       - "127.0.0.1:32001:8000"
     networks:
-      - puppet_master_redis_network
+      - internal_tools_redis_network
     env_file:
       - /home/ENV/puppet-master/.env
     depends_on:
@@ -19,7 +19,7 @@ services:
     container_name: puppet_master_redis
     restart: unless-stopped
     networks:
-      - puppet_master_redis_network
+      - internal_tools_redis_network
     command:
       - /bin/sh
       - -c
@@ -31,7 +31,7 @@ services:
       - /home/ENV/puppet-master/redis.env
 
 networks:
-  puppet_master_redis_network:
+  internal_tools_redis_network:
 
 volumes:
   puppet_master_redis_volume:
