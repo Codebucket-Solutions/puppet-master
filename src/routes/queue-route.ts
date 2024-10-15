@@ -34,7 +34,7 @@ router.post("/pdf", async (req: Request, res: Response) => {
             throw new Error("Some Error Occurred While Queueing")
         }
     } catch (err ) {
-        res.json({
+        res.status(500).json({
             success: false,
             message: err.message,
             error: err
