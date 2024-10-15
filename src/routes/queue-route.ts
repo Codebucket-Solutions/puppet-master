@@ -3,7 +3,7 @@ const router = express.Router();
 import { v4 } from "uuid";
 import { queue, queueEvents}from "../utils/queue-client";
 import {Job} from "bullmq";
-
+import  {redisClient} from "../utils/redis-client";
 
 type response = {
     path: string
@@ -12,9 +12,11 @@ type response = {
 router.post("/pdf", async (req: Request, res: Response) => {
     try {
         let apiKey = req.headers["x-api-key"];
-        if (apiKey != process.env.API_KEY) {
-            throw new Error("Invalid Api Key");
+        let valid = await redisClient.get(`tokens:${apiKey}`);
+        if(!valid) {
+            throw new Error("Api Key Wrong Or Expired");
         }
+
         const { task } = req.body;
 
         let job: Job|undefined = await queue.add(v4(),task);
