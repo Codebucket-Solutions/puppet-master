@@ -6,7 +6,7 @@ services:
     container_name: puppet-master
     restart: unless-stopped
     ports:
-      - "127.0.0.1:32001:8000"
+        - "127.0.0.1:32001:8000"
     networks:
       - internal_tools_redis_network
     env_file:
@@ -25,8 +25,7 @@ services:
       - -c
       - redis-server --requirepass "$${REDIS_PASSWORD:?REDIS_PASSWORD variable is not set}"
     volumes:
-      - puppet_master_redis_volume:/var/lib/redis/data
-      - /home/ENV/puppet-master/redis.conf:/usr/local/etc/redis/redis.conf:ro
+      - puppet_master_redis_volume:/data
     env_file:
       - /home/ENV/puppet-master/redis.env
 
