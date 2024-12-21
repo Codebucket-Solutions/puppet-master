@@ -1,5 +1,5 @@
 info:
-  description: API documentation for Puppet Master Module.
+  description: Generated API documentation from Hoppscotch collection.
   title: Puppet Master
   version: 1.0.0
 openapi: 3.0.0
@@ -64,7 +64,15 @@ paths:
                   type: object
               type: object
         required: true
-      responses: {}
+      responses:
+        '200':
+          content:
+            application/json:
+              example: ''
+              schema:
+                properties: {}
+                type: object
+          description: OK
       summary: pdf
       tags: []
 servers:
