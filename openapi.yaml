@@ -1,0 +1,71 @@
+info:
+  description: API documentation for Puppet Master Module.
+  title: Puppet Master
+  version: 1.0.0
+openapi: 3.0.0
+paths:
+  https://puppet-master.internal.codebuckets.in/pdf:
+    post:
+      parameters:
+      - in: header
+        name: x-api-key
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            example:
+              task:
+                content: <!DOCTYPE html><html><head><title>Page Title</title></head><body><h1>This
+                  is a Heading</h1><p>This is a paragraph.</p></body></html>
+                launchOptions:
+                  args:
+                  - --no-sandbox
+                otherPageFunctions:
+                - - waitForNetworkIdle
+                  - - concurrency: 0
+                pageOptions:
+                  waitUntil: networkidle0
+                pdfOptions:
+                  format: A4
+                  printBackground: true
+            schema:
+              properties:
+                task:
+                  properties:
+                    content:
+                      type: string
+                    launchOptions:
+                      properties:
+                        args:
+                          items:
+                            type: string
+                          type: array
+                      type: object
+                    otherPageFunctions:
+                      items:
+                        items:
+                          type: string
+                        type: array
+                      type: array
+                    pageOptions:
+                      properties:
+                        waitUntil:
+                          type: string
+                      type: object
+                    pdfOptions:
+                      properties:
+                        format:
+                          type: string
+                        printBackground:
+                          type: number
+                      type: object
+                  type: object
+              type: object
+        required: true
+      responses: {}
+      summary: pdf
+      tags: []
+servers:
+- url: ''
